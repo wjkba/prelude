@@ -2,7 +2,7 @@ import { FilmCard } from "@/types";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { useCallback, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
 
 interface SearchBarProps {
   onDisplayedFilmsChange: (films: FilmCard[]) => void;
@@ -16,6 +16,12 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   async function searchFilms(text: string) {
     console.log(OMDB_API_KEY);
     console.log("CLICKED");
+
+    if (!text.trim()) {
+      onDisplayedFilmsChange([]);
+      return;
+    }
+
     try {
       const response = await axios.get("https://www.omdbapi.com/", {
         params: { s: text, apikey: OMDB_API_KEY },
@@ -38,15 +44,13 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
 
   function handleSearch(text: string) {
     setQuery(text);
+    debouncedSearch(text);
     console.log(query);
   }
 
   return (
-    <View>
+    <View className=" bg-white border border-1 p-2">
       <TextInput value={query} onChangeText={handleSearch} />
-      <Pressable onPress={() => searchFilms(query)}>
-        <Text>SEARCH</Text>
-      </Pressable>
     </View>
   );
 }
