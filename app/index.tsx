@@ -1,9 +1,14 @@
-import { Text, View } from "react-native";
+import { Link } from "expo-router";
+import { Pressable, Text, View } from "react-native";
 
 export default function Index() {
   return (
-    <View className="bg-purple-500 items-center justify-center flex-1">
-      <Text>prelud</Text>
+    <View className="items-center justify-center flex-1">
+      <Link href="/search" asChild>
+        <Pressable className="items-center justify-center bg-purple-500 p-4">
+          <Text>Search</Text>
+        </Pressable>
+      </Link>
     </View>
   );
 }
