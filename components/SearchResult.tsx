@@ -1,26 +1,37 @@
 import { Link } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 
 interface SearchResultProps {
   title: string;
   imageUrl: string;
+  releaseYear: string;
 }
 
-function SearchResult({ title, imageUrl }: SearchResultProps) {
+function SearchResult({ title, imageUrl, releaseYear }: SearchResultProps) {
   return (
     <Link
       href={{
         pathname: "/filmInfo",
         params: { title, posterUrl: imageUrl },
       }}
+      asChild
     >
-      <View className="gap-4 p-4 border border-red-500 bg-slate-300 flex-row">
+      <Pressable
+        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+        className="flex-row gap-6 border-border border rounded-md overflow-hidden bg-surface items-center"
+        android_ripple={{ color: "rgba(255, 255, 255, 0.1)" }}
+      >
         <Image
-          style={{ height: 80, aspectRatio: 2 / 3 }}
+          style={{ height: 120, aspectRatio: 2 / 3 }}
           source={{ uri: imageUrl }}
         />
-        <Text className="font-bold flex-1">{title}</Text>
-      </View>
+        <View className="flex-1 mr-6 justify-center">
+          <Text numberOfLines={2} className="text-lg  text-white font-bold">
+            {title}
+          </Text>
+          <Text className="text-stone-200 text-sm">{releaseYear}</Text>
+        </View>
+      </Pressable>
     </Link>
   );
 }

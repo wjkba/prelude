@@ -2,7 +2,7 @@ import { FilmCard } from "@/types";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { useCallback, useState } from "react";
-import { TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 interface SearchBarProps {
   onDisplayedFilmsChange: (films: FilmCard[]) => void;
@@ -31,6 +31,7 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
         imdbID: film.imdbID,
         title: film.Title,
         posterUrl: film.Poster,
+        releaseYear: film.Year,
       }));
       console.log("🚀 ~ searchFilms ~ films:", films);
 
@@ -48,9 +49,25 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
     console.log(query);
   }
 
+  function clearSearch() {
+    setQuery("");
+    onDisplayedFilmsChange([]);
+  }
+
   return (
-    <View className=" bg-white border border-1 p-2">
-      <TextInput value={query} onChangeText={handleSearch} />
+    <View className="bg-input rounded-xl border border-1 border-border py-2 px-4 flex-row items-center">
+      <TextInput
+        className="text-white text-lg flex-1"
+        value={query}
+        onChangeText={handleSearch}
+        placeholder="Search..."
+        placeholderTextColor="#9CA3AF"
+      />
+      {query.length > 0 && (
+        <Pressable onPress={clearSearch} className="ml-2 p-1">
+          <Text className="text-gray-400 text-lg">✕</Text>
+        </Pressable>
+      )}
     </View>
   );
 }

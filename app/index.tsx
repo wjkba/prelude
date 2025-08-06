@@ -5,8 +5,8 @@ export default function Index() {
   return (
     <View className="items-center justify-center flex-1">
       <Link href="/search" asChild>
-        <Pressable className="items-center justify-center bg-purple-500 p-4">
-          <Text>Search</Text>
+        <Pressable className="items-center justify-center absolute right-16 bottom-20 bg-purple-500 w-16 h-16 rounded-full">
+          <Text>X</Text>
         </Pressable>
       </Link>
     </View>

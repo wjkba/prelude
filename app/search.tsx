@@ -13,12 +13,18 @@ function SearchScreen() {
 
   return (
     <View className="m-4">
-      <SearchBar onDisplayedFilmsChange={handleDisplayedFilmsChange} />
+      <View className="mb-8">
+        <SearchBar onDisplayedFilmsChange={handleDisplayedFilmsChange} />
+      </View>
       <FlatList
         data={displayedFilms}
         renderItem={({ item }) => (
-          <View className="mb-2">
-            <SearchResult title={item.title} imageUrl={item.posterUrl} />
+          <View className="mb-4">
+            <SearchResult
+              title={item.title}
+              imageUrl={item.posterUrl}
+              releaseYear={item.releaseYear}
+            />
           </View>
         )}
         keyExtractor={(item, index) => `${item.imdbID}-${index}`}
