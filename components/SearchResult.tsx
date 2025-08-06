@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 
 interface SearchResultProps {
@@ -7,15 +8,20 @@ interface SearchResultProps {
 
 function SearchResult({ title, imageUrl }: SearchResultProps) {
   return (
-    <View className="gap-4 p-4 border border-red-500 bg-slate-300 flex-row">
-      <Image
-        style={{ height: 80, aspectRatio: 2 / 3 }}
-        source={{
-          uri: imageUrl,
-        }}
-      />
-      <Text className="font-bold flex-1">{title}</Text>
-    </View>
+    <Link
+      href={{
+        pathname: "/filmInfo",
+        params: { title, posterUrl: imageUrl },
+      }}
+    >
+      <View className="gap-4 p-4 border border-red-500 bg-slate-300 flex-row">
+        <Image
+          style={{ height: 80, aspectRatio: 2 / 3 }}
+          source={{ uri: imageUrl }}
+        />
+        <Text className="font-bold flex-1">{title}</Text>
+      </View>
+    </Link>
   );
 }
 
