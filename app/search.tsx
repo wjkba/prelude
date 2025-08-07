@@ -21,6 +21,7 @@ function SearchScreen() {
         renderItem={({ item }) => (
           <View className="mb-4">
             <SearchResult
+              imdbID={item.imdbID}
               title={item.title}
               imageUrl={item.posterUrl}
               releaseYear={item.releaseYear}

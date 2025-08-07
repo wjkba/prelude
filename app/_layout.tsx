@@ -19,7 +19,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="search" />
-        <Stack.Screen name="filmInfo" />
+        <Stack.Screen name="FilmInfoScreen" />
       </Stack>
     </View>
   );

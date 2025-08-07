@@ -2,17 +2,23 @@ import { Link } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
 interface SearchResultProps {
+  imdbID: string;
   title: string;
   imageUrl: string;
   releaseYear: string;
 }
 
-function SearchResult({ title, imageUrl, releaseYear }: SearchResultProps) {
+function SearchResult({
+  imdbID,
+  title,
+  imageUrl,
+  releaseYear,
+}: SearchResultProps) {
   return (
     <Link
       href={{
-        pathname: "/filmInfo",
-        params: { title, posterUrl: imageUrl },
+        pathname: "/FilmInfoScreen",
+        params: { imdbID, title, releaseYear, posterUrl: imageUrl },
       }}
       asChild
     >

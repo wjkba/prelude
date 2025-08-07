@@ -21,7 +21,11 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
 
     try {
       const response = await axios.get("https://www.omdbapi.com/", {
-        params: { s: text, apikey: OMDB_API_KEY },
+        params: {
+          s: text,
+          apikey: OMDB_API_KEY,
+          type: "movie",
+        },
       });
       const receivedFilms = response.data.Search || [];
       const films: FilmCard[] = receivedFilms.map((film: any) => ({
