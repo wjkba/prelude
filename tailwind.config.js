@@ -12,6 +12,7 @@ module.exports = {
         input: "#2E2E35",
         border: "#3C3C42",
         surface: "#2A262E",
+        background: "#1B181E",
       },
     },
   },

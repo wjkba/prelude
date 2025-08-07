@@ -8,15 +8,12 @@ interface SearchBarProps {
   onDisplayedFilmsChange: (films: FilmCard[]) => void;
 }
 
+const OMDB_API_KEY = process.env.EXPO_PUBLIC_OMDB_API_KEY;
+
 function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
-  const OMDB_API_KEY = process.env.EXPO_PUBLIC_OMDB_API_KEY;
-
   async function searchFilms(text: string) {
-    console.log(OMDB_API_KEY);
-    console.log("CLICKED");
-
     if (!text.trim()) {
       onDisplayedFilmsChange([]);
       return;
@@ -26,7 +23,7 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
       const response = await axios.get("https://www.omdbapi.com/", {
         params: { s: text, apikey: OMDB_API_KEY },
       });
-      const receivedFilms = response.data.Search;
+      const receivedFilms = response.data.Search || [];
       const films: FilmCard[] = receivedFilms.map((film: any) => ({
         imdbID: film.imdbID,
         title: film.Title,
@@ -46,7 +43,6 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   function handleSearch(text: string) {
     setQuery(text);
     debouncedSearch(text);
-    console.log(query);
   }
 
   function clearSearch() {
