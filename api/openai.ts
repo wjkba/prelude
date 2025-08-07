@@ -51,7 +51,7 @@ Output a strict JSON object matching exactly this structure and types (no extra 
 
 Write all fields in a stylistically engaging, thoughtful, and evocative manner. Do not repeat the film's plot. Generate ONLY the JSON object, nothing else.`;
 
-export async function getFilmInfo(filmTitle: string) {
+export async function getFilmInfoAI(filmTitle: string) {
   try {
     console.log("Starting API call...");
 
