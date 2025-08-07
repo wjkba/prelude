@@ -1,7 +1,7 @@
 import { getFilmInfoAI } from "@/api/openai";
 import FilmInfo from "@/components/FilmInfo";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -27,13 +27,7 @@ function FilmInfoScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [filmData, setFilmData] = useState<FilmAIData | null>(null);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, [navigation, title]);
-
-  async function handlePress() {
+  const handlePress = useCallback(async () => {
     setIsLoading(true);
     try {
       const result = await getFilmInfoAI(title as string);
@@ -44,14 +38,29 @@ function FilmInfoScreen() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [title]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: title as string,
+      headerRight: () => (
+        <Pressable
+          onPress={handlePress}
+          disabled={isLoading}
+          className="pl-4 py-2"
+        >
+          <Text className="text-white font-medium">
+            {isLoading ? "Loading..." : "Load data"}
+          </Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation, title, isLoading, handlePress]);
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
       <View className="flex-1">
-        <Pressable onPress={handlePress} className="bg-pink-800 p-4">
-          <Text>Load data</Text>
-        </Pressable>
         <FilmInfo
           isLoading={isLoading}
           title={title as string}
