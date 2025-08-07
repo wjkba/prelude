@@ -3,7 +3,6 @@ import FilmInfo from "@/components/FilmInfo";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 interface FilmAIData {
   openingSentence: string;
@@ -59,17 +58,15 @@ function FilmInfoScreen() {
   }, [navigation, title, isLoading, handlePress]);
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-background">
-      <View className="flex-1">
-        <FilmInfo
-          isLoading={isLoading}
-          title={title as string}
-          posterUrl={posterUrl as string}
-          releaseYear={releaseYear as string}
-          filmData={filmData}
-        />
-      </View>
-    </SafeAreaView>
+    <View className="flex-1 bg-background">
+      <FilmInfo
+        isLoading={isLoading}
+        title={title as string}
+        posterUrl={posterUrl as string}
+        releaseYear={releaseYear as string}
+        filmData={filmData}
+      />
+    </View>
   );
 }
 

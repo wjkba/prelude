@@ -1,5 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import MoodTag from "./FilmInfo/MoodTag";
+import Theme from "./FilmInfo/Theme";
 
 interface FilmInfoProps {
   title: string;
@@ -23,41 +25,22 @@ interface FilmInfoProps {
   } | null;
 }
 
-interface MoodTagProps {
-  text: string;
-}
-
 interface HeadingProps {
   children: React.ReactNode;
-}
-
-interface ThemeProps {
-  emoji: string;
-  theme: string;
-  description: string;
-}
-
-function MoodTag({ text }: MoodTagProps) {
-  return (
-    <View className="bg-surface rounded-lg p-2">
-      <Text className="text-white">{text}</Text>
-    </View>
-  );
 }
 
 function Heading({ children }: HeadingProps) {
   return <Text className="mb-3 font-bold text-white text-xl">{children}</Text>;
 }
 
-function Theme({ emoji, theme, description }: ThemeProps) {
+interface BodyTextProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+function BodyText({ children, className = "" }: BodyTextProps) {
   return (
-    <View className="p-4 bg-surface flex-row justify-between">
-      <View className="flex-row gap-3">
-        <Text className="text-2xl">{emoji}</Text>
-        <Text className="text-white text-lg">{theme}</Text>
-      </View>
-      <Text>\/</Text>
-    </View>
+    <Text className={`text-stone-100 text-lg ${className}`}>{children}</Text>
   );
 }
 
@@ -75,9 +58,9 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
   return (
     <View className="mx-4">
       <View className="mb-12">
-        <Text className="text-white text-xl mb-4">
+        <BodyText className="text-xl text-center mb-8">
           &quot;{filmData.openingSentence}&quot;
-        </Text>
+        </BodyText>
         <View className="flex-row gap-2 flex-wrap">
           {filmData.moodTags.map((tag, index) => (
             <MoodTag key={index} text={tag} />
@@ -87,7 +70,7 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
       <View className="gap-12">
         <View>
           <Heading>Genre & Style</Heading>
-          <Text className="text-white">{filmData.genreAndStyle}</Text>
+          <BodyText>{filmData.genreAndStyle}</BodyText>
         </View>
         <View>
           <Heading>Themes</Heading>
@@ -104,17 +87,15 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
         </View>
         <View>
           <Heading>Cultural Context</Heading>
-          <Text className="text-white">{filmData.culturalContext}</Text>
+          <BodyText>{filmData.culturalContext}</BodyText>
         </View>
         <View>
           <Heading>What to look out for</Heading>
           <View className="gap-4">
             {filmData.whatToLookOutFor.map((item, index) => (
               <View key={index}>
-                <Text className="text-white font-bold text-lg mb-1">
-                  {item.title}
-                </Text>
-                <Text className="text-white">{item.description}</Text>
+                <BodyText className="font-medium mb-1">{item.title}</BodyText>
+                <BodyText>{item.description}</BodyText>
               </View>
             ))}
           </View>
@@ -140,14 +121,14 @@ function FilmInfo({
         colors={["transparent", "#1B181E"]}
         start={{ x: 0, y: 0.1 }}
         end={{ x: 0, y: 0.8 }}
-        className="mb-6 items-center justify-end h-[280px] w-full"
+        className="mb-6 items-center justify-end h-[240px] w-full"
       >
         <Image
           style={{ height: 200, aspectRatio: 2 / 3 }}
           source={{ uri: posterUrl as string }}
         />
       </LinearGradient>
-      <View className="mb-8 justify-center items-center">
+      <View className="mb-6 justify-center items-center">
         <Text className="text-white text-3xl mb-2 font-bold text-center">
           {title}
         </Text>
