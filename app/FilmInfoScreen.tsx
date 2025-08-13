@@ -1,43 +1,47 @@
+import { storeFilmData } from "@/api/asyncstorage";
 import { getFilmInfoAI } from "@/api/openai";
 import FilmInfo from "@/components/FilmInfo";
+import { filmDataAI } from "@/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-interface FilmAIData {
-  openingSentence: string;
-  moodTags: string[];
-  genreAndStyle: string;
-  themes: {
-    emoji: string;
-    name: string;
-    description: string;
-  }[];
-  culturalContext: string;
-  whatToLookOutFor: {
-    title: string;
-    description: string;
-  }[];
-}
-
 function FilmInfoScreen() {
-  const { imdbID, title, releaseYear, posterUrl } = useLocalSearchParams();
+  const { imdbID, title, releaseYear, posterUrl } = useLocalSearchParams<{
+    imdbID: string;
+    title: string;
+    releaseYear: string;
+    posterUrl: string;
+  }>();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const [filmData, setFilmData] = useState<FilmAIData | null>(null);
+  const [filmData, setFilmData] = useState<filmDataAI | null>(null);
 
   const handlePress = useCallback(async () => {
     setIsLoading(true);
+
+    const cachedData = await AsyncStorage.getItem(`film_${imdbID}`);
+    if (cachedData) {
+      const { filmData } = JSON.parse(cachedData);
+      setFilmData(filmData);
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const result = await getFilmInfoAI(title as string);
-      console.log("Final result:", result);
-      setFilmData(result);
+      const aiGeneratedFilmData = await getFilmInfoAI(title, releaseYear);
+      console.log("Final result:", aiGeneratedFilmData);
+      setFilmData(aiGeneratedFilmData);
+      if (aiGeneratedFilmData) {
+        storeFilmData(imdbID, aiGeneratedFilmData);
+      }
     } catch (error) {
       console.error("Failed to get film info:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [title]);
+  }, [imdbID, title, releaseYear]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,6 +60,8 @@ function FilmInfoScreen() {
       ),
     });
   }, [navigation, title, isLoading, handlePress]);
+
+  // TODO: add info while loading
 
   return (
     <View className="flex-1 bg-background">

@@ -51,12 +51,14 @@ Output a strict JSON object matching exactly this structure and types (no extra 
 
 Write all fields in a stylistically engaging, thoughtful, and evocative manner. Do not repeat the film's plot. Generate ONLY the JSON object, nothing else.`;
 
-export async function getFilmInfoAI(filmTitle: string) {
+export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
   try {
     console.log("Starting API call...");
 
+    // TODO: add internet search
+
     const response = await client.responses.parse({
-      model: "gpt-4o-2024-08-06",
+      model: "gpt-5-nano",
       input: [
         {
           role: "system",
@@ -64,7 +66,7 @@ export async function getFilmInfoAI(filmTitle: string) {
         },
         {
           role: "user",
-          content: `Generate analysis for the film: ${filmTitle}`,
+          content: `Generate analysis for the film: ${filmTitle} - ${releaseYear}`,
         },
       ],
       text: {
