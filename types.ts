@@ -20,8 +20,3 @@ export type filmDataAI = {
     description: string;
   }[];
 };
-
-export interface StoredFilm {
-  imdbID: string;
-  filmData: filmDataAI;
-}

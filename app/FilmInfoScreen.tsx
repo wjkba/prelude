@@ -23,25 +23,25 @@ function FilmInfoScreen() {
 
     const cachedData = await AsyncStorage.getItem(`film_${imdbID}`);
     if (cachedData) {
-      const { filmData } = JSON.parse(cachedData);
-      setFilmData(filmData);
+      const { filmDataAI } = JSON.parse(cachedData);
+      setFilmData(filmDataAI);
       setIsLoading(false);
       return;
     }
 
     try {
-      const aiGeneratedFilmData = await getFilmInfoAI(title, releaseYear);
-      console.log("Final result:", aiGeneratedFilmData);
-      setFilmData(aiGeneratedFilmData);
-      if (aiGeneratedFilmData) {
-        storeFilmData(imdbID, aiGeneratedFilmData);
+      const filmDataAI = await getFilmInfoAI(title, releaseYear);
+      console.log("Final result:", filmDataAI);
+      setFilmData(filmDataAI);
+      if (filmDataAI) {
+        storeFilmData(imdbID, title, posterUrl, releaseYear, filmDataAI);
       }
     } catch (error) {
       console.error("Failed to get film info:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [imdbID, title, releaseYear]);
+  }, [imdbID, posterUrl, title, releaseYear]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

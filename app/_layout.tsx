@@ -17,7 +17,7 @@ export default function RootLayout() {
           animation: "fade",
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{ title: "" }} />
         <Stack.Screen name="search" />
         <Stack.Screen name="FilmInfoScreen" />
       </Stack>
