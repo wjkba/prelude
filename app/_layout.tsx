@@ -7,7 +7,7 @@ export default function RootLayout() {
     <View style={{ flex: 1, backgroundColor: "#1B181E" }}>
       <Stack
         screenOptions={{
-          headerTintColor: "#FCE4EC",
+          headerTintColor: "white",
           headerStyle: {
             backgroundColor: "#1B181E",
           },
@@ -15,10 +15,11 @@ export default function RootLayout() {
             backgroundColor: "#1B181E",
           },
           animation: "fade",
+          headerShadowVisible: false,
         }}
       >
         <Stack.Screen name="index" options={{ title: "" }} />
-        <Stack.Screen name="search" />
+        <Stack.Screen name="search" options={{ title: "" }} />
         <Stack.Screen name="FilmInfoScreen" />
       </Stack>
     </View>

@@ -57,6 +57,7 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   return (
     <View className="bg-input rounded-xl border border-1 border-border py-1 px-4 flex-row items-center">
       <TextInput
+        autoFocus
         className="text-white text-lg flex-1"
         value={query}
         onChangeText={handleSearch}

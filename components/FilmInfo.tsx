@@ -108,21 +108,21 @@ function FilmInfo({
         colors={["transparent", "#1B181E"]}
         start={{ x: 0, y: 0.1 }}
         end={{ x: 0, y: 0.8 }}
-        className="mb-6 items-center justify-end h-[240px] w-full"
+        className="mb-6 items-center justify-end h-[220px] w-full"
       >
         <Image
           style={{ height: 200, aspectRatio: 2 / 3 }}
           source={{ uri: posterUrl as string }}
         />
       </LinearGradient>
-      <View className="mb-6 justify-center items-center">
-        <Text className="text-white text-3xl mb-2 font-bold text-center">
+      <View className="mb-2 gap-2 justify-center items-center">
+        <Text className="text-white text-3xl font-bold text-center">
           {title}
         </Text>
         {/* <Text className="text-stone-300 text-lg">{releaseYear}</Text> */}
       </View>
       {isLoading ? (
-        <View className="mt-4 flex-1 justify-center items-center">
+        <View className="mt-4 p-4 flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="white" />
         </View>
       ) : (

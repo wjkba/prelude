@@ -1,10 +1,11 @@
 import SearchResult from "@/components/SearchResult";
 import { FilmCard } from "@/types";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Index() {
   const [recentFilms, setRecentFilms] = useState<null | FilmCard[]>([]);
@@ -37,8 +38,7 @@ export default function Index() {
 
   return (
     <View className="px-4 flex-1">
-      <Text className="text-2xl text-white font-bold mb-4">Recent Films</Text>
-      <View className="gap-4">
+      <ScrollView contentContainerStyle={{ gap: 16 }}>
         {recentFilms && recentFilms.length > 0 ? (
           recentFilms.map((film) => (
             <SearchResult
@@ -52,10 +52,10 @@ export default function Index() {
         ) : (
           <Text className="text-white">No recent films found</Text>
         )}
-      </View>
+      </ScrollView>
       <Link href="/search" asChild>
         <Pressable className="items-center justify-center absolute right-16 bottom-20 bg-purple-500 w-16 h-16 rounded-full">
-          <Text>X</Text>
+          <Ionicons name="search" size={24} color="white" />
         </Pressable>
       </Link>
     </View>
