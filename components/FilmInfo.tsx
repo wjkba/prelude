@@ -83,7 +83,7 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 12 }}
+            contentContainerStyle={{ gap: 12, paddingRight: 64 }}
           >
             {filmData.themes.map((theme, index) => (
               <Theme key={index} emoji={theme.emoji} theme={theme.name} />
@@ -126,7 +126,7 @@ function FilmInfo({
       className="bg-background overflow-hidden flex-1 w-full"
       contentContainerStyle={{ paddingBottom: 80 }}
     >
-      <View className="mb-6 h-[240px] w-full relative">
+      <View className="mb-6 h-[250px] relative">
         {/* Backdrop Image */}
         <Image
           style={{

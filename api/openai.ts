@@ -27,7 +27,7 @@ const filmAISchema = z.object({
         description: z.string(),
       })
     )
-    .min(3)
+    .min(4)
     .max(6),
 });
 
@@ -36,12 +36,12 @@ const PROMPTv3 = `You are an assistant that generates detailed, spoiler-free int
 First, search for comprehensive information about the requested film, including critical reviews, cinematography, cultural context, and the director's approach.
 
 Then, generate the film information with the following fields:
-- **openingSentence**: A short poetic sentence that sets the mood and invites the user into the experience without spoilers.
+- **openingSentence**: A short poetic sentence that sets the mood and invites the user into the experience without spoilers. Do not include the film's title.
 - **moodTags**: An array of 5 to 7 mood words describing the emotional tone.
-- **genreAndStyle**: A concise description of the genre and artistic style of the film.
+- **genreAndStyle**: A paragraph of the genre and artistic style of the film.
 - **themes**: An array of exactly 3 objects, each with an 'emoji' and a 'name' for the theme.
 - **culturalContext**: A paragraph explaining the cultural, historical, or social background relevant to the film.
-- **whatToLookOutFor**: An array of 3 to 6 items. Each item should have an 'emoji', a 'title', and a 'description' highlighting a notable, spoiler-free cinematic technique, stylistic choice, or motif.
+- **whatToLookOutFor**: An array of 4 to 6 items. Each item should have an 'emoji', a 'title', and a 'description' highlighting a notable, spoiler-free cinematic technique, stylistic choice, or motif.
 
 Write all content in a stylistically engaging, thoughtful, and evocative manner. Do not repeat the film's plot.`;
 

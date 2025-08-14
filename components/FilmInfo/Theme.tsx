@@ -7,7 +7,7 @@ interface ThemeProps {
 
 function Theme({ emoji, theme }: ThemeProps) {
   return (
-    <View className="bg-surface max-w-[150px] p-4 rounded-lg">
+    <View className="bg-surface max-w-[150px] w-full p-4 rounded-lg">
       <Text className="text-3xl mb-6">{emoji}</Text>
       <Text className="text-lg line-clamp-2 font-medium text-white">
         {theme}
