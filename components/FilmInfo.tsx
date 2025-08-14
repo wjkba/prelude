@@ -1,6 +1,7 @@
 import { filmDataAI, FilmMetadata } from "@/types";
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import Accordion from "./FilmInfo/Accordion";
 import MoodTag from "./FilmInfo/MoodTag";
 import Theme from "./FilmInfo/Theme";
 
@@ -79,16 +80,15 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
         </View>
         <View>
           <Heading>Themes</Heading>
-          <View className="gap-3">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 12 }}
+          >
             {filmData.themes.map((theme, index) => (
-              <Theme
-                key={index}
-                emoji={theme.emoji}
-                theme={theme.name}
-                description={theme.description}
-              />
+              <Theme key={index} emoji={theme.emoji} theme={theme.name} />
             ))}
-          </View>
+          </ScrollView>
         </View>
         <View>
           <Heading>Cultural Context</Heading>
@@ -96,12 +96,14 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
         </View>
         <View>
           <Heading>What to look out for</Heading>
-          <View className="gap-4">
+          <View className="gap-3">
             {filmData.whatToLookOutFor.map((item, index) => (
-              <View key={index}>
-                <BodyText className="font-medium mb-1">{item.title}</BodyText>
-                <BodyText>{item.description}</BodyText>
-              </View>
+              <Accordion
+                key={index}
+                emoji={item.emoji}
+                theme={item.title}
+                description={item.description}
+              />
             ))}
           </View>
         </View>
@@ -161,7 +163,7 @@ function FilmInfo({
         <Text className="text-white text-3xl font-bold text-center">
           {title}
         </Text>
-        <Text className="text-stone-300 text-center text-lg">
+        <Text className="text-stone-200 text-center text-lg">
           {filmMetadata &&
             `${filmMetadata?.director} · ${releaseYear} · ${filmMetadata?.runtime} `}
         </Text>

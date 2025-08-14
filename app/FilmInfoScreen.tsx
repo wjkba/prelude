@@ -54,6 +54,7 @@ function FilmInfoScreen() {
         setFilmMetadata(metadata);
 
         const filmDataAI = await getFilmInfoAI(title, releaseYear);
+        console.log("🚀 ~ loadFilmData ~ filmDataAI:", filmDataAI);
         setFilmData(filmDataAI);
 
         if (filmDataAI) {

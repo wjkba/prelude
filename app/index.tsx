@@ -3,13 +3,45 @@ import { FilmCard } from "@/types";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Link, useNavigation } from "expo-router";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Index() {
   const [recentFilms, setRecentFilms] = useState<null | FilmCard[]>([]);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
+
+  const handleClearStorage = () => {
+    Alert.alert(
+      "Clear All Data",
+      "Are you sure you want to clear all saved films? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Clear",
+          style: "destructive",
+          onPress: async () => {
+            await AsyncStorage.clear();
+            setRecentFilms([]);
+          },
+        },
+      ]
+    );
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={handleClearStorage} className="p-2">
+          <Ionicons name="trash-outline" size={20} color="white" />
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
     async function loadRecentFilms() {

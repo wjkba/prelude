@@ -17,6 +17,7 @@ function SearchScreen() {
         <SearchBar onDisplayedFilmsChange={handleDisplayedFilmsChange} />
       </View>
       <FlatList
+        contentContainerStyle={{ paddingBottom: 120 }}
         data={displayedFilms}
         renderItem={({ item }) => (
           <View className="mb-4">

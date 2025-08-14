@@ -12,10 +12,10 @@ export type filmDataAI = {
   themes: {
     emoji: string;
     name: string;
-    description: string;
   }[];
   culturalContext: string;
   whatToLookOutFor: {
+    emoji: string;
     title: string;
     description: string;
   }[];
