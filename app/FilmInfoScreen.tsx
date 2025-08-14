@@ -1,8 +1,8 @@
-import { storeFilmData } from "@/api/asyncstorage";
+import { getFilmOMDB } from "@/api/omdb";
 import { getFilmInfoAI } from "@/api/openai";
 import { getFilmTMDB } from "@/api/tmdb";
 import FilmInfo from "@/components/FilmInfo";
-import { filmDataAI } from "@/types";
+import { filmDataAI, FilmMetadata } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -18,6 +18,8 @@ function FilmInfoScreen() {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
   const [filmData, setFilmData] = useState<filmDataAI | null>(null);
+  const [filmMetadata, setFilmMetadata] = useState<FilmMetadata | null>(null);
+  const [backdropPath, setBackdropPath] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadFilmData() {
@@ -25,20 +27,48 @@ function FilmInfoScreen() {
 
       const cachedData = await AsyncStorage.getItem(`film_${imdbID}`);
       if (cachedData) {
-        const { filmDataAI } = JSON.parse(cachedData);
+        const {
+          filmDataAI,
+          backdropPath: cachedBackdrop,
+          filmMetadata: cachedMetadata,
+        } = JSON.parse(cachedData);
         setFilmData(filmDataAI);
+        if (cachedBackdrop) setBackdropPath(cachedBackdrop);
+        if (cachedMetadata) setFilmMetadata(cachedMetadata);
         setIsLoading(false);
         return;
       }
 
       try {
         const filmDataTMDB = await getFilmTMDB(imdbID);
-        console.log(filmDataTMDB);
+        const backdrop = filmDataTMDB?.movie_results?.[0]?.backdrop_path || "";
+        setBackdropPath(backdrop);
+
+        const { Director, Runtime } = await getFilmOMDB(imdbID);
+
+        const metadata = {
+          director: Director === "N/A" ? null : Director.split(",")[0].trim(),
+          releaseYear,
+          runtime: Runtime,
+        };
+        setFilmMetadata(metadata);
+
         const filmDataAI = await getFilmInfoAI(title, releaseYear);
-        console.log("Final result:", filmDataAI);
         setFilmData(filmDataAI);
+
         if (filmDataAI) {
-          storeFilmData(imdbID, title, posterUrl, releaseYear, filmDataAI);
+          await AsyncStorage.setItem(
+            `film_${imdbID}`,
+            JSON.stringify({
+              imdbID,
+              title,
+              posterUrl,
+              backdropPath: backdrop,
+              releaseYear,
+              filmDataAI,
+              filmMetadata: metadata,
+            })
+          );
         }
       } catch (error) {
         console.error("Failed to get film info:", error);
@@ -48,7 +78,8 @@ function FilmInfoScreen() {
     }
 
     loadFilmData();
-  }, [imdbID, posterUrl, title, releaseYear]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imdbID]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,9 +95,11 @@ function FilmInfoScreen() {
       <FilmInfo
         isLoading={isLoading}
         title={title as string}
+        backdropPath={backdropPath || ""}
         posterUrl={posterUrl as string}
         releaseYear={releaseYear as string}
         filmData={filmData}
+        filmMetadata={filmMetadata}
       />
     </View>
   );

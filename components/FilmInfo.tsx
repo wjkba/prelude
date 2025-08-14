@@ -1,4 +1,4 @@
-import { filmDataAI } from "@/types";
+import { filmDataAI, FilmMetadata } from "@/types";
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import MoodTag from "./FilmInfo/MoodTag";
@@ -6,10 +6,12 @@ import Theme from "./FilmInfo/Theme";
 
 interface FilmInfoProps {
   title: string;
+  backdropPath: string;
   posterUrl: string;
   releaseYear: string;
   isLoading: boolean;
   filmData: filmDataAI | null;
+  filmMetadata: FilmMetadata | null;
 }
 
 interface HeadingProps {
@@ -110,32 +112,59 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
 
 function FilmInfo({
   title,
+  backdropPath,
   posterUrl,
   releaseYear,
   isLoading,
   filmData,
+  filmMetadata,
 }: FilmInfoProps) {
   return (
     <ScrollView
       className="bg-background overflow-hidden flex-1 w-full"
       contentContainerStyle={{ paddingBottom: 80 }}
     >
-      <LinearGradient
-        colors={["transparent", "#1B181E"]}
-        start={{ x: 0, y: 0.1 }}
-        end={{ x: 0, y: 0.8 }}
-        className="mb-6 items-center justify-end h-[220px] w-full"
-      >
+      <View className="mb-6 h-[240px] w-full relative">
+        {/* Backdrop Image */}
         <Image
-          style={{ height: 200, aspectRatio: 2 / 3 }}
-          source={{ uri: posterUrl as string }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100%",
+            height: "100%",
+          }}
+          source={{ uri: `https://image.tmdb.org/t/p/w780${backdropPath}` }}
+          resizeMode="cover"
         />
-      </LinearGradient>
-      <View className="mb-8 gap-2 justify-center items-center">
+
+        {/* Gradient Overlay */}
+        <LinearGradient
+          colors={["transparent", "#1B181E"]}
+          start={{ x: 0, y: 0.1 }}
+          end={{ x: 0, y: 0.8 }}
+          className="absolute inset-0 items-center justify-end"
+        >
+          {/* Poster Image */}
+          <Image
+            style={{
+              height: 200,
+              aspectRatio: 2 / 3,
+            }}
+            source={{ uri: posterUrl as string }}
+          />
+        </LinearGradient>
+      </View>
+      <View className="mb-8 mx-4 gap-2 justify-center items-center">
         <Text className="text-white text-3xl font-bold text-center">
           {title}
         </Text>
-        {/* <Text className="text-stone-300 text-lg">{releaseYear}</Text> */}
+        <Text className="text-stone-300 text-center text-lg">
+          {filmMetadata &&
+            `${filmMetadata?.director} · ${releaseYear} · ${filmMetadata?.runtime} `}
+        </Text>
       </View>
       {isLoading ? (
         <View className="mt-4 p-4 flex-1 justify-center items-center">

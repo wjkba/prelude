@@ -42,6 +42,7 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
     }
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(debounce(searchFilms, 500), []);
 
   function handleSearch(text: string) {

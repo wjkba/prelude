@@ -20,3 +20,9 @@ export type filmDataAI = {
     description: string;
   }[];
 };
+
+export type FilmMetadata = {
+  director: string | null;
+  releaseYear: string;
+  runtime: string;
+};

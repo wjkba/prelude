@@ -53,8 +53,6 @@ Write all fields in a stylistically engaging, thoughtful, and evocative manner. 
 
 export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
   try {
-    console.log("Starting API call...");
-
     // TODO: add internet search
 
     const response = await client.responses.parse({
@@ -74,8 +72,6 @@ export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
         format: zodTextFormat(filmAISchema, "filmInfoAI"),
       },
     });
-
-    console.log("Parsed output:", response.output_parsed);
 
     return response.output_parsed;
   } catch (error) {
