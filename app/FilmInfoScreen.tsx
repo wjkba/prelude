@@ -1,5 +1,6 @@
 import { storeFilmData } from "@/api/asyncstorage";
 import { getFilmInfoAI } from "@/api/openai";
+import { getFilmTMDB } from "@/api/tmdb";
 import FilmInfo from "@/components/FilmInfo";
 import { filmDataAI } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,6 +32,8 @@ function FilmInfoScreen() {
       }
 
       try {
+        const filmDataTMDB = await getFilmTMDB(imdbID);
+        console.log(filmDataTMDB);
         const filmDataAI = await getFilmInfoAI(title, releaseYear);
         console.log("Final result:", filmDataAI);
         setFilmData(filmDataAI);

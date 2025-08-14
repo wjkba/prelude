@@ -31,27 +31,43 @@ function BodyText({ children, className = "" }: BodyTextProps) {
   );
 }
 
+function renderMoodTags(moodTags: string[]) {
+  const moodColors = [
+    "#A63C71", // Luminous Magenta (primary tie-in)
+    "#8E486E", // Plum Dust
+    "#7A4F79", // Violet Fade
+    "#6B5A85", // Lavender Smoke
+    "#5C6A8F", // Hazy Indigo
+    "#587D86", // Mist Teal
+    "#5F7E72", // Deep Sage
+  ];
+
+  const sortedMoodTags = [...moodTags].sort((a, b) => b.length - a.length);
+
+  const shuffledColors = [...moodColors].sort(() => Math.random() - 0.5);
+
+  return sortedMoodTags.map((tag, index) => (
+    <MoodTag
+      key={index}
+      text={tag}
+      color={shuffledColors[index % shuffledColors.length]}
+    />
+  ));
+}
+
 function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
   if (!filmData) {
-    return (
-      <View className="mx-4 flex-1 justify-center items-center">
-        <Text className="text-gray-400 text-lg">
-          Press &quot;Load data&quot; to get AI analysis
-        </Text>
-      </View>
-    );
+    return <></>;
   }
 
   return (
     <View className="mx-4">
       <View className="mb-12">
-        <BodyText className="text-xl text-center mb-8">
+        <BodyText className="text-xl mb-4">
           &quot;{filmData.openingSentence}&quot;
         </BodyText>
-        <View className="flex-row gap-2 flex-wrap">
-          {filmData.moodTags.map((tag, index) => (
-            <MoodTag key={index} text={tag} />
-          ))}
+        <View className="flex-row gap-2  flex-wrap">
+          {renderMoodTags(filmData.moodTags)}
         </View>
       </View>
       <View className="gap-12">
@@ -115,7 +131,7 @@ function FilmInfo({
           source={{ uri: posterUrl as string }}
         />
       </LinearGradient>
-      <View className="mb-2 gap-2 justify-center items-center">
+      <View className="mb-8 gap-2 justify-center items-center">
         <Text className="text-white text-3xl font-bold text-center">
           {title}
         </Text>

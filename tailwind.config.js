@@ -9,10 +9,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primary: "#A63C71",
         input: "#2E2E35",
         border: "#3C3C42",
-        surface: "#2A262E",
+        surface: "#2A2A30",
         background: "#1B181E",
+        textPrimary: "#FFFFFF",
+        textSecondary: "#D0D0D5",
       },
     },
   },

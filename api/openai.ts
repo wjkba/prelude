@@ -58,7 +58,8 @@ export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
     // TODO: add internet search
 
     const response = await client.responses.parse({
-      model: "gpt-5-nano",
+      model: "gpt-4.1-nano",
+      max_output_tokens: 500,
       input: [
         {
           role: "system",
