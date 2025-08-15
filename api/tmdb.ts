@@ -3,15 +3,15 @@ import axios from "axios";
 
 export async function getFilmTMDB(imdbID: string) {
   try {
-    const apiKey =
-      (await AsyncStorage.getItem("tmdb_api_key")) ||
+    const readAccessToken =
+      (await AsyncStorage.getItem("tmdb_read_access_token")) ||
       process.env.EXPO_PUBLIC_TMDB_READ_ACCESS_TOKEN;
     const response = await axios.get(
       `https://api.themoviedb.org/3/find/${imdbID}`,
       {
         headers: {
           accept: "application/json",
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${readAccessToken}`,
         },
         params: {
           external_source: "imdb_id",

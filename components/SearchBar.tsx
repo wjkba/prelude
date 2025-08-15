@@ -12,9 +12,9 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   async function searchFilms(text: string) {
-    const searchQuery = text.trim();
+    const searchQuery = text.trimEnd();
 
-    if (!searchQuery || searchQuery.length < 2) {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
       onDisplayedFilmsChange([]);
       return;
     }

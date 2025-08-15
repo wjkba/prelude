@@ -31,7 +31,7 @@ export default function Settings() {
     try {
       const openai = await AsyncStorage.getItem("openai_api_key");
       const omdb = await AsyncStorage.getItem("omdb_api_key");
-      const tmdb = await AsyncStorage.getItem("tmdb_api_key");
+      const tmdb = await AsyncStorage.getItem("tmdb_read_access_token");
 
       if (openai) setOpenaiKey(openai);
       if (omdb) setOmdbKey(omdb);
@@ -41,20 +41,29 @@ export default function Settings() {
     }
   };
 
-  // TODO: replace AsyncStorage with more secure option
+  // TODO: replace AsyncStorage with more secure r
 
-  const saveApiKey = async (key: string, value: string) => {
+  const saveApiKeys = async () => {
     try {
-      if (value.trim()) {
-        await AsyncStorage.setItem(key, value.trim());
-        Alert.alert("Success", "API key saved successfully");
+      if (openaiKey.trim()) {
+        await AsyncStorage.setItem("openai_api_key", openaiKey.trim());
       } else {
-        await AsyncStorage.removeItem(key);
-        Alert.alert("Success", "API key removed");
+        await AsyncStorage.removeItem("openai_api_key");
+      }
+
+      if (omdbKey.trim()) {
+        await AsyncStorage.setItem("omdb_api_key", omdbKey.trim());
+      } else {
+        await AsyncStorage.removeItem("omdb_api_key");
+      }
+
+      if (tmdbKey.trim()) {
+        await AsyncStorage.setItem("tmdb_read_access_token", tmdbKey.trim());
+      } else {
+        await AsyncStorage.removeItem("tmdb_read_access_token");
       }
     } catch (error) {
-      console.error("Failed to save API key:", error);
-      Alert.alert("Error", "Failed to save API key");
+      console.error("Failed to save API keys:", error);
     }
   };
 
@@ -92,7 +101,6 @@ export default function Settings() {
             <TextInput
               value={openaiKey}
               onChangeText={setOpenaiKey}
-              onBlur={() => saveApiKey("openai_api_key", openaiKey)}
               placeholder="Enter OpenAI API key"
               placeholderTextColor="#6B7280"
               className="bg-[#242329] text-white p-4 rounded-xl"
@@ -106,7 +114,6 @@ export default function Settings() {
             <TextInput
               value={omdbKey}
               onChangeText={setOmdbKey}
-              onBlur={() => saveApiKey("omdb_api_key", omdbKey)}
               placeholder="Enter OMDB API key"
               placeholderTextColor="#6B7280"
               className="bg-[#242329] text-white p-4 rounded-xl"
@@ -114,19 +121,28 @@ export default function Settings() {
             />
           </View>
 
-          {/* TMDB API Key */}
+          {/* TMDB Read Access Token */}
           <View>
-            <Text className="text-stone-300 mb-2">TMDB API Key</Text>
+            <Text className="text-stone-300 mb-2">TMDB Read Access Token</Text>
             <TextInput
               value={tmdbKey}
               onChangeText={setTmdbKey}
-              onBlur={() => saveApiKey("tmdb_api_key", tmdbKey)}
-              placeholder="Enter TMDB API key"
+              placeholder="Enter TMDB Read Access Token"
               placeholderTextColor="#6B7280"
               className="bg-[#242329] text-white p-4 rounded-xl"
               secureTextEntry
             />
           </View>
+
+          {/* Save Button */}
+          <Pressable
+            onPress={saveApiKeys}
+            className="bg-purple-600 p-4 rounded-xl mt-4"
+          >
+            <Text className="text-white font-semibold text-center">
+              Save API Keys
+            </Text>
+          </Pressable>
         </View>
 
         {/* Clear Data Section */}
