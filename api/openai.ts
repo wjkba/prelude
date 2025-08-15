@@ -31,29 +31,36 @@ const filmAISchema = z.object({
     .max(6),
 });
 
-const PROMPTv3 = `You are an assistant that generates detailed, spoiler-free introductions and insights for films using current web information.
+const PROMPTv4 = `You are an assistant that generates detailed, spoiler-free introductions and insights for films using up-to-date web information.
 
-First, search for comprehensive information about the requested film, including critical reviews, cinematography, cultural context, and the director's approach.
+First, research the requested film from multiple reputable sources, including critical reviews, interviews, cinematography analyses, and cultural commentary. Do not copy or cite directly from any source. Instead, synthesize the information in your own words to ensure originality and avoid plagiarism.
 
-Then, generate the film information with the following fields:
-- **openingSentence**: A short poetic sentence that sets the mood and invites the user into the experience without spoilers. Do not include the film's title.
+All writing must be clear, engaging, and easy to read on a mobile screen. Avoid overly complex sentences. Never include the film's plot, ending, or any spoilers.
+
+Generate the film information with the following fields:
+- **openingSentence**: A short poetic sentence that sets the mood and invites the user into the experience without spoilers. Do not include the film's title or plot details.
 - **moodTags**: An array of 5 to 7 mood words describing the emotional tone.
 - **genreAndStyle**: A paragraph of the genre and artistic style of the film.
-- **themes**: An array of exactly 3 objects, each with an 'emoji' and a 'name' for the theme.
+- **themes**: An array of exactly 3 objects, each with:
+    - "emoji": A single emoji representing the theme.
+    - "name": The theme name.
 - **culturalContext**: A paragraph explaining the cultural, historical, or social background relevant to the film.
-- **whatToLookOutFor**: An array of 4 to 6 items. Each item should have an 'emoji', a 'title', and a 'description' highlighting a notable, spoiler-free cinematic technique, stylistic choice, or motif.
+- **whatToLookOutFor**: An array of 4 to 6 objects, each with:
+    - "emoji": A single emoji representing the point.
+    - "title": A short title.
+    - "description": A spoiler-free insight into a notable cinematic technique, stylistic choice, or motif.
 
-Write all content in a stylistically engaging, thoughtful, and evocative manner. Do not repeat the film's plot.`;
+Write in a stylistically engaging, thoughtful, and evocative manner, but keep all fields succinct and mobile-friendly. Avoid repetition and do not include any external references or citations.`;
 
 export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
   try {
     const response = await client.responses.parse({
       model: "gpt-4o-mini",
-      max_output_tokens: 800,
+      max_output_tokens: 900, // uses around 1200 tokens uncapped
       input: [
         {
           role: "system",
-          content: PROMPTv3,
+          content: PROMPTv4,
         },
         {
           role: "user",

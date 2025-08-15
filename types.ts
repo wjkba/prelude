@@ -3,6 +3,7 @@ export interface FilmCard {
   title: string;
   posterUrl: string;
   releaseYear: string;
+  viewedAt?: number;
 }
 
 export type filmDataAI = {

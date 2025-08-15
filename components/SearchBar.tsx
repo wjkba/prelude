@@ -14,7 +14,9 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   async function searchFilms(text: string) {
-    if (!text.trim()) {
+    const searchQuery = text.trim();
+
+    if (!searchQuery || searchQuery.length < 2) {
       onDisplayedFilmsChange([]);
       return;
     }
@@ -22,7 +24,7 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
     try {
       const response = await axios.get("https://www.omdbapi.com/", {
         params: {
-          s: text,
+          s: searchQuery,
           apikey: OMDB_API_KEY,
           type: "movie",
         },

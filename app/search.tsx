@@ -20,7 +20,7 @@ function SearchScreen() {
         contentContainerStyle={{ paddingBottom: 120 }}
         data={displayedFilms}
         renderItem={({ item }) => (
-          <View className="mb-4">
+          <View className="mb-3">
             <SearchResult
               imdbID={item.imdbID}
               title={item.title}

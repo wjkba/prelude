@@ -1,4 +1,4 @@
-import { filmDataAI } from "@/types";
+import { filmDataAI, FilmMetadata } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function storeFilmData(
@@ -6,7 +6,9 @@ export async function storeFilmData(
   title: string,
   posterUrl: string,
   releaseYear: string,
-  filmDataAI: filmDataAI
+  filmDataAI: filmDataAI,
+  backdropPath?: string,
+  filmMetadata?: FilmMetadata
 ) {
   try {
     const jsonData = JSON.stringify({
@@ -16,6 +18,9 @@ export async function storeFilmData(
       releaseYear,
       filmDataAI: filmDataAI,
       lastUpdated: Date.now(),
+      viewedAt: Date.now(),
+      backdropPath,
+      filmMetadata,
     });
     await AsyncStorage.setItem(`film_${imdbID}`, jsonData);
     return true;

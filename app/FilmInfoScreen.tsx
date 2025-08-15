@@ -1,3 +1,4 @@
+import { storeFilmData } from "@/api/asyncstorage";
 import { getFilmOMDB } from "@/api/omdb";
 import { getFilmInfoAI } from "@/api/openai";
 import { getFilmTMDB } from "@/api/tmdb";
@@ -27,14 +28,27 @@ function FilmInfoScreen() {
 
       const cachedData = await AsyncStorage.getItem(`film_${imdbID}`);
       if (cachedData) {
+        const parsedData = JSON.parse(cachedData);
         const {
           filmDataAI,
           backdropPath: cachedBackdrop,
           filmMetadata: cachedMetadata,
-        } = JSON.parse(cachedData);
+        } = parsedData;
         setFilmData(filmDataAI);
         if (cachedBackdrop) setBackdropPath(cachedBackdrop);
         if (cachedMetadata) setFilmMetadata(cachedMetadata);
+
+        // Update viewedAt timestamp for cached films
+        await storeFilmData(
+          imdbID,
+          title as string,
+          posterUrl as string,
+          releaseYear as string,
+          filmDataAI,
+          cachedBackdrop,
+          cachedMetadata
+        );
+
         setIsLoading(false);
         return;
       }
@@ -58,17 +72,14 @@ function FilmInfoScreen() {
         setFilmData(filmDataAI);
 
         if (filmDataAI) {
-          await AsyncStorage.setItem(
-            `film_${imdbID}`,
-            JSON.stringify({
-              imdbID,
-              title,
-              posterUrl,
-              backdropPath: backdrop,
-              releaseYear,
-              filmDataAI,
-              filmMetadata: metadata,
-            })
+          await storeFilmData(
+            imdbID,
+            title as string,
+            posterUrl as string,
+            releaseYear as string,
+            filmDataAI,
+            backdrop,
+            metadata
           );
         }
       } catch (error) {
