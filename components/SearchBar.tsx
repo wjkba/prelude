@@ -1,5 +1,5 @@
+import { searchFilmsOMDB } from "@/api/omdb";
 import { FilmCard } from "@/types";
-import axios from "axios";
 import debounce from "lodash.debounce";
 import { useCallback, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -7,8 +7,6 @@ import { Pressable, Text, TextInput, View } from "react-native";
 interface SearchBarProps {
   onDisplayedFilmsChange: (films: FilmCard[]) => void;
 }
-
-const OMDB_API_KEY = process.env.EXPO_PUBLIC_OMDB_API_KEY;
 
 function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
   const [query, setQuery] = useState("");
@@ -22,14 +20,8 @@ function SearchBar({ onDisplayedFilmsChange }: SearchBarProps) {
     }
 
     try {
-      const response = await axios.get("https://www.omdbapi.com/", {
-        params: {
-          s: searchQuery,
-          apikey: OMDB_API_KEY,
-          type: "movie",
-        },
-      });
-      const receivedFilms = response.data.Search || [];
+      const response = await searchFilmsOMDB(searchQuery);
+      const receivedFilms = response.Search || [];
       const films: FilmCard[] = receivedFilms.map((film: any) => ({
         imdbID: film.imdbID,
         title: film.Title,

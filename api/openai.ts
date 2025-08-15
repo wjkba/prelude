@@ -1,10 +1,16 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
-const client = new OpenAI({
-  apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
-});
+const getOpenAIClient = async () => {
+  const apiKey =
+    (await AsyncStorage.getItem("openai_api_key")) ||
+    process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+  return new OpenAI({
+    apiKey: apiKey,
+  });
+};
 
 const filmAISchema = z.object({
   openingSentence: z.string(),
@@ -54,6 +60,7 @@ Write in a stylistically engaging, thoughtful, and evocative manner, but keep al
 
 export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
   try {
+    const client = await getOpenAIClient();
     const response = await client.responses.parse({
       model: "gpt-4o-mini",
       max_output_tokens: 900, // uses around 1200 tokens uncapped
