@@ -25,7 +25,7 @@ export async function getFilmOMDB(imdbID: string) {
     const apiKey =
       (await AsyncStorage.getItem("omdb_api_key")) ||
       process.env.EXPO_PUBLIC_OMDB_API_KEY;
-    const response = await axios.get(`http://www.omdbapi.com/`, {
+    const response = await axios.get("https://www.omdbapi.com/", {
       params: {
         i: imdbID,
         apikey: apiKey,
