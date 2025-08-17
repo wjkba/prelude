@@ -46,7 +46,7 @@ All writing must be clear, engaging, and easy to read on a mobile screen. Avoid 
 Generate the film information with the following fields:
 - **openingSentence**: A short poetic sentence that sets the mood and invites the user into the experience without spoilers. Do not include the film's title or plot details.
 - **moodTags**: Mood words describing the emotional tone.
-- **genreAndStyle**: The genre and artistic style of the film.
+- **genreAndStyle**: A paragraph of the genre and artistic style of the film.
 - **themes**: Each with an "emoji" and a "name".
 - **culturalContext**: A paragraph explaining the cultural, historical, or social background relevant to the film.
 - **whatToLookOutFor**: Each with an "emoji", a "title", and a "description". The description should be a spoiler-free insight highlighting something to actively notice while watching — it could be a visual motif, camera movement, sound design, lighting choice, or subtle narrative cue. Make it feel like a companion pointing out cinematic moments, not a dry explanation.
