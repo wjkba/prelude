@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# Prelude
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An AI‑assisted film companion built with Expo. Search movies, view rich context, and get a thoughtful, spoiler‑free guide powered by OpenAI.
 
-## Get started
+![Desktop](assets/preview.png)
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+## ✨ Features
 
-2. Start the app
+- Film search (OMDb)
+- Rich metadata (TMDB) for posters and details
+- AI Film Guide (OpenAI):
+- Recently viewed list (local)
+- Settings screen to manage API keys
+- Modern mobile UI with NativeWind and animations (Moti)
 
-   ```bash
-   npx expo start
-   ```
+## 🛠️ Tech Stack
 
-In the output, you'll find options to open the app in a
+- Expo (React Native) + TypeScript, Expo Router, React Navigation
+- NativeWind (Tailwind CSS), Moti
+- AsyncStorage for local persistence
+- Axios for networking
+- OpenAI API, OMDb API, TMDB API
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🚀 Getting Started
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Expo Go app (for device testing) or Android/iOS simulators
 
-## Get a fresh project
-
-When you're ready, run:
+### Install
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Configure API Keys
+You can provide keys in two ways. The in‑app Settings screen is the simplest.
 
-## Learn more
+1) In‑app (recommended for development)
+- Open the app → Settings (gear icon) → paste keys:
+  - OpenAI API Key
+  - OMDb API Key
+  - TMDB Read Access Token (Bearer token)
 
-To learn more about developing your project with Expo, look at the following resources:
+2) Environment variables (read at runtime)
+- Set these before starting the app (EXPO_PUBLIC_* are intentionally public in client bundles):
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+export EXPO_PUBLIC_OPENAI_API_KEY=your_openai_key
+export EXPO_PUBLIC_OMDB_API_KEY=your_omdb_key
+export EXPO_PUBLIC_TMDB_READ_ACCESS_TOKEN=your_tmdb_bearer_token
+```
 
-## Join the community
+### Run
 
-Join our community of developers creating universal apps.
+```bash
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Shortcuts:
+- Android: `npm run android`
+- iOS: `npm run ios`
+- Web: `npm run web`
