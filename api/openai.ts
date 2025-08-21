@@ -63,7 +63,7 @@ export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
     const client = await getOpenAIClient();
     const response = await client.responses.parse({
       model: "gpt-4o-mini",
-      max_output_tokens: 700,
+      max_output_tokens: 1000,
       input: [
         {
           role: "system",
