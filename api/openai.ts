@@ -37,7 +37,7 @@ const filmAISchema = z.object({
     .max(6),
 });
 
-const PROMPTv5 = `You are an assistant that generates detailed, spoiler-free introductions and insights for films using up-to-date web information.
+const PROMPTv6 = `You are an assistant that generates detailed, spoiler-free introductions and insights for films using up-to-date web information.
 
 First, research the requested film from multiple reputable sources, including critical reviews, interviews, cinematography analyses, and cultural commentary. Do not copy or cite directly from any source. Instead, synthesize the information in your own words to ensure originality and avoid plagiarism.
 
@@ -49,20 +49,20 @@ Generate the film information with the following fields:
 - **genreAndStyle**: A paragraph of the genre and artistic style of the film.
 - **themes**: Each with an "emoji" and a "name".
 - **culturalContext**: A paragraph explaining the cultural, historical, or social background relevant to the film.
-- **whatToLookOutFor**: Each with an "emoji", a "title", and a "description". The description should be a spoiler-free insight highlighting something to actively notice while watching — it could be a visual motif, camera movement, sound design, lighting choice, or subtle narrative cue. Make it feel like a companion pointing out cinematic moments, not a dry explanation.
+- **whatToLookOutFor**: Each with an "emoji", a "title", and a "description". The description should be a sharp, spoiler-free insight into a **specific** piece of cinematic craft (a visual motif, sound design choice, camera technique). Go beyond the obvious: connect the detail to the film's mood or themes, making the viewer feel like they've been let in on a secret. **Avoid generic genre conventions.**
 
-Write in a stylistically engaging, thoughtful, and evocative manner, but keep all fields succinct and mobile-friendly. Avoid repetition and do not include any external references or citations.`;
+Write in a stylistically engaging, thoughtful, and evocative manner, but keep all fields succint and mobile-friendly. Avoid repetition and do not include any external references or citations.`;
 
 export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
   try {
     const client = await getOpenAIClient();
     const response = await client.responses.parse({
       model: "gpt-4o-mini",
-      max_output_tokens: 400, // uses around 350 tokens uncapped
+      // max_output_tokens: 400, // uses around 350 tokens uncapped
       input: [
         {
           role: "system",
-          content: PROMPTv5,
+          content: PROMPTv6,
         },
         {
           role: "user",
@@ -74,7 +74,6 @@ export async function getFilmInfoAI(filmTitle: string, releaseYear: string) {
       },
       tools: [{ type: "web_search_preview" }],
     });
-
     return response.output_parsed;
   } catch (error) {
     console.error("API Error:", error);
