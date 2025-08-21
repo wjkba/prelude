@@ -4,10 +4,11 @@ import { getFilmInfoAI } from "@/api/openai";
 import { getFilmTMDB } from "@/api/tmdb";
 import FilmInfo from "@/components/FilmInfo";
 import { filmDataAI, FilmMetadata } from "@/types";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { View } from "react-native";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Alert, Pressable, View } from "react-native";
 
 function FilmInfoScreen() {
   const { imdbID, title, releaseYear, posterUrl } = useLocalSearchParams<{
@@ -21,6 +22,20 @@ function FilmInfoScreen() {
   const [filmData, setFilmData] = useState<filmDataAI | null>(null);
   const [filmMetadata, setFilmMetadata] = useState<FilmMetadata | null>(null);
   const [backdropPath, setBackdropPath] = useState<string | null>(null);
+
+  const clearFilmData = useCallback(async () => {
+    Alert.alert("Clear Data", "Clear cached data for this film?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Clear",
+        style: "destructive",
+        onPress: async () => {
+          await AsyncStorage.removeItem(`film_${imdbID}`);
+          navigation.goBack();
+        },
+      },
+    ]);
+  }, [imdbID, navigation]);
 
   useEffect(() => {
     async function loadFilmData() {
@@ -97,8 +112,13 @@ function FilmInfoScreen() {
     navigation.setOptions({
       headerShown: true,
       title: "",
+      headerRight: () => (
+        <Pressable onPress={clearFilmData} className="mr-4 p-0">
+          <Ionicons name="ellipsis-vertical" size={20} color="white" />
+        </Pressable>
+      ),
     });
-  }, [navigation, title]);
+  }, [navigation, title, clearFilmData]);
 
   // TODO: add info while loading
 
