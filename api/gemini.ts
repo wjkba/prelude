@@ -1,6 +1,6 @@
 import { filmDataAI } from "@/types";
 import { GoogleGenAI, Type } from "@google/genai";
-import { PROMPTv4 } from "./prompts";
+import { PROMPTv4_GEMINI } from "./prompts";
 
 const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
 
@@ -15,7 +15,7 @@ export async function getFilmInfoGemini(
       model: "gemini-2.5-flash-lite",
       contents: `Generate analysis for the film: "${filmTitle}" (${releaseYear}`,
       config: {
-        systemInstruction: PROMPTv4,
+        systemInstruction: PROMPTv4_GEMINI,
         // tools: [{ googleSearch: {} }], // Google search doesn't seem to work with structured output
         responseMimeType: "application/json",
         responseSchema: {
@@ -39,6 +39,7 @@ export async function getFilmInfoGemini(
                   emoji: { type: Type.STRING },
                   name: { type: Type.STRING },
                 },
+                propertyOrdering: ["emoji", "name"],
               },
             },
             culturalContext: {
@@ -53,6 +54,7 @@ export async function getFilmInfoGemini(
                   title: { type: Type.STRING },
                   description: { type: Type.STRING },
                 },
+                propertyOrdering: ["emoji", "title", "description"],
               },
             },
           },
