@@ -1,6 +1,6 @@
 import { storeFilmData } from "@/api/asyncstorage";
+import { getFilmInfoGemini } from "@/api/gemini";
 import { getFilmOMDB } from "@/api/omdb";
-import { getFilmInfoAI } from "@/api/openai";
 import { getFilmTMDB } from "@/api/tmdb";
 import FilmInfo from "@/components/FilmInfo";
 import { filmDataAI, FilmMetadata } from "@/types";
@@ -82,7 +82,9 @@ function FilmInfoScreen() {
         };
         setFilmMetadata(metadata);
 
-        const filmDataAI = await getFilmInfoAI(title, releaseYear);
+        // const filmDataAI = await getFilmInfoOpenAI(title, releaseYear);
+        const filmDataAI = await getFilmInfoGemini(title, releaseYear);
+
         console.log("🚀 ~ loadFilmData ~ filmDataAI:", filmDataAI);
         setFilmData(filmDataAI);
 

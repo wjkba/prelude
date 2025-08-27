@@ -1,3 +1,4 @@
+import { getFilmInfoGemini } from "@/api/gemini";
 import SearchResult from "@/components/SearchResult";
 import { FilmCard } from "@/types";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -5,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { Link, useNavigation } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Button, Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Index() {
   const [recentFilms, setRecentFilms] = useState<null | FilmCard[]>([]);
@@ -86,6 +87,13 @@ export default function Index() {
   return (
     <View className="px-4 flex-1">
       <RecentFilmsView />
+      <Button
+        title="TESTING"
+        onPress={async () => {
+          const response = await getFilmInfoGemini("Psycho", "1960");
+          console.log(response);
+        }}
+      />
       <Link href="/search" asChild>
         <Pressable className="items-center justify-center absolute right-16 bottom-20 bg-purple-500 w-16 h-16 rounded-full">
           <Ionicons name="search" size={24} color="white" />
