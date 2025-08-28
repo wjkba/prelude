@@ -1,6 +1,14 @@
 import { filmDataAI, FilmMetadata } from "@/types";
 import { LinearGradient } from "expo-linear-gradient";
-import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import { Link } from "expo-router";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import Accordion from "./FilmInfo/Accordion";
 import MoodTag from "./FilmInfo/MoodTag";
 import Theme from "./FilmInfo/Theme";
@@ -65,6 +73,7 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
 
   return (
     <View className="mx-4">
+      {/* Opening sentence */}
       <View className="mb-12">
         <BodyText className="text-xl mb-4">
           &quot;{filmData.openingSentence}&quot;
@@ -73,6 +82,8 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
           {renderMoodTags(filmData.moodTags)}
         </View>
       </View>
+
+      {/* Genre & Style */}
       <View className="gap-12">
         <View>
           <Heading>Genre & Style</Heading>
@@ -90,10 +101,14 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
             ))}
           </ScrollView>
         </View>
+
+        {/* Cultural Context */}
         <View>
           <Heading>Cultural Context</Heading>
           <BodyText>{filmData.culturalContext}</BodyText>
         </View>
+
+        {/* What to look out for */}
         <View>
           <Heading>What to look out for</Heading>
           <View className="gap-3">
@@ -124,8 +139,9 @@ function FilmInfo({
   return (
     <ScrollView
       className="bg-background overflow-hidden flex-1 w-full"
-      contentContainerStyle={{ paddingBottom: 80 }}
+      contentContainerStyle={{ paddingBottom: 0 }}
     >
+      {/* Poster & Backdrop */}
       <View className="mb-6 h-[250px] relative">
         {/* Backdrop Image */}
         <Image
@@ -159,6 +175,8 @@ function FilmInfo({
           />
         </LinearGradient>
       </View>
+
+      {/* Title and metadata info below poster */}
       <View className="mb-8 mx-4 gap-2 justify-center items-center">
         <Text className="text-white text-3xl font-bold text-center">
           {title}
@@ -168,12 +186,35 @@ function FilmInfo({
             `${filmMetadata?.director} · ${releaseYear} · ${filmMetadata?.runtime} `}
         </Text>
       </View>
+
       {isLoading ? (
         <View className="mt-4 p-4 flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="white" />
         </View>
       ) : (
-        renderFilmInfoAI(filmData)
+        <>
+          {renderFilmInfoAI(filmData)}
+
+          {/* Chat */}
+          <LinearGradient
+            start={{ x: 0, y: 0.1 }}
+            end={{ x: 0, y: 1 }}
+            colors={["transparent", "#A63C71"]}
+            className="mt-20 justify-center items-center  min-h-[200px]"
+          >
+            <Link
+              href={{
+                pathname: "/ChatScreen",
+                params: { title, releaseYear },
+              }}
+              asChild
+            >
+              <Pressable className="bg-surface px-4 py-3 rounded-lg">
+                <Text className="text-white text-lg">Open chat</Text>
+              </Pressable>
+            </Link>
+          </LinearGradient>
+        </>
       )}
     </ScrollView>
   );
