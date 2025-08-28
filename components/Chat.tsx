@@ -1,25 +1,54 @@
-import { getChatResponseGemini } from "@/api/gemini";
-import { MotiView } from "moti";
-import React from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { getChatResponseOpenAI } from "@/api/openai";
+import { MotiView, ScrollView } from "moti";
+import React, { useState } from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 interface ChatProps {
   title: string;
   releaseYear: string;
 }
 
+interface Message {
+  text: string;
+  role: "user" | "assistant";
+}
+
 function Chat({ title, releaseYear }: ChatProps) {
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastResponseId, setLastResponseId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+
   interface StartPromptProps {
     text: string;
     message: string;
   }
 
   async function handleSendMessage(message: string) {
+    if (!message.trim()) return;
+
+    setIsLoading(true);
+    setHasStarted(true);
+
+    setMessages((prev) => [...prev, { text: message, role: "user" }]);
+
     try {
-      const response = await getChatResponseGemini(message, title, releaseYear);
+      const response = await getChatResponseOpenAI(
+        message,
+        title,
+        releaseYear,
+        lastResponseId
+      );
       console.log(response);
+      setLastResponseId(response.id);
+      setMessages((prev) => [
+        ...prev,
+        { text: response.output_text, role: "assistant" },
+      ]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -49,10 +78,13 @@ function Chat({ title, releaseYear }: ChatProps) {
     );
   }
 
-  return (
-    <View className="py-8 relative items-center px-4 h-screen">
-      <ScrollView contentContainerStyle={{ gap: 12 }} className="w-full">
-        {/* Start prompts */}
+  function renderStartPrompts(hasStarted: boolean) {
+    if (hasStarted) {
+      return;
+    }
+
+    return (
+      <View className="gap-3">
         <StartPrompt
           text="🔥 Explain the ending"
           message="Explain the ending"
@@ -65,20 +97,36 @@ function Chat({ title, releaseYear }: ChatProps) {
           text="🔍 Break down the symbolism"
           message="Explain the ending"
         />
-        <Message text="Testing" role="user" />
-        <Message text="lorem ipsum dolor sit amet" role="assistant" />
+      </View>
+    );
+  }
+
+  return (
+    <View className="py-8 relative px-4 h-screen">
+      <ScrollView>
+        {/* Start prompts */}
+        {renderStartPrompts(hasStarted)}
+
+        {/* Messages */}
+        <View style={{ width: "100%" }}>
+          {messages.map((item, idx) => (
+            <Message key={idx} text={item.text} role={item.role} />
+          ))}
+        </View>
 
         {/* Loading dot */}
-        <MotiView
-          from={{ scale: 1, opacity: 0.6 }}
-          animate={{ scale: 1.3, opacity: 1 }}
-          transition={{
-            loop: true,
-            type: "timing",
-            duration: 900,
-          }}
-          className="bg-primary ml-2 w-6 h-6 rounded-full"
-        />
+        {isLoading && (
+          <MotiView
+            from={{ scale: 1, opacity: 0.6 }}
+            animate={{ scale: 1.3, opacity: 1 }}
+            transition={{
+              loop: true,
+              type: "timing",
+              duration: 900,
+            }}
+            className="bg-primary ml-2 w-6 h-6 rounded-full"
+          />
+        )}
       </ScrollView>
 
       {/* Input */}

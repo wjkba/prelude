@@ -70,3 +70,32 @@ export async function getFilmInfoOpenAI(
     throw error;
   }
 }
+
+export async function getChatResponseOpenAI(
+  message: string,
+  filmTitle: string,
+  releaseYear: string,
+  previousResponseId: string | null
+) {
+  try {
+    const client = await getOpenAIClient();
+    const response = await client.responses.create({
+      model: "gpt-4o-mini",
+      ...(previousResponseId && { previous_response_id: previousResponseId }),
+      input: [
+        {
+          role: "system",
+          content: `You are a thoughtful film companion who helps viewers reflect on a movie after watching it. You are talking about ${filmTitle} from ${releaseYear}`,
+        },
+        {
+          role: "user",
+          content: `${message}`,
+        },
+      ],
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw Error;
+  }
+}
