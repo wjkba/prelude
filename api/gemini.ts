@@ -12,7 +12,7 @@ export async function getFilmInfoGemini(
 ): Promise<filmDataAI> {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: `Generate analysis for the film: "${filmTitle}" (${releaseYear}`,
       config: {
         systemInstruction: PROMPTv4_GEMINI,
@@ -78,5 +78,37 @@ export async function getFilmInfoGemini(
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export type GeminiChatHistoryPart = { text: string };
+
+export type GeminiChatHistoryItem = {
+  role: "user" | "model";
+  parts: GeminiChatHistoryPart[];
+};
+
+export async function getChatResponseGemini(
+  message: string,
+  filmTitle: string,
+  releaseYear: string,
+  history?: GeminiChatHistoryItem[]
+) {
+  try {
+    const chat = ai.chats.create({
+      model: "gemini-2.5-flash",
+      history: history ?? [],
+      config: {
+        systemInstruction: `You are a thoughtful film companion who helps viewers reflect on a movie after watching it. You are talking about ${filmTitle} from ${releaseYear}`,
+      },
+    });
+
+    const response = await chat.sendMessage({
+      message,
+    });
+
+    return response.text;
+  } catch (error) {
+    console.error(error);
   }
 }

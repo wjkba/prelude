@@ -19,7 +19,7 @@ function ChatScreen() {
 
   return (
     <View className="bg-background">
-      <Chat />
+      <Chat title={title} releaseYear={releaseYear} />
     </View>
   );
 }
