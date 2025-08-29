@@ -81,6 +81,7 @@ export async function getChatResponseOpenAI(
     const client = await getOpenAIClient();
     const response = await client.responses.create({
       model: "gpt-4o-mini",
+      max_output_tokens: 300,
       ...(previousResponseId && { previous_response_id: previousResponseId }),
       input: [
         {

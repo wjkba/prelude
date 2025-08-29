@@ -6,7 +6,7 @@ import { PROMPTv4_GEMINI } from "./prompts";
 const getGoogleGenAIClient = async () => {
   const apiKey =
     (await AsyncStorage.getItem("gemini_api_key")) ||
-    process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+    process.env.EXPO_PUBLIC_GEMINI_API_KEY;
   return new GoogleGenAI({
     apiKey: apiKey,
   });

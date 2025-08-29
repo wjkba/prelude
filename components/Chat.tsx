@@ -1,7 +1,17 @@
 import { getChatResponseOpenAI } from "@/api/openai";
-import { MotiView, ScrollView } from "moti";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { MotiView } from "moti";
 import React, { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import Markdown from "react-native-markdown-display";
 
 interface ChatProps {
   title: string;
@@ -18,6 +28,8 @@ function Chat({ title, releaseYear }: ChatProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [lastResponseId, setLastResponseId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const headerHeight = useHeaderHeight();
 
   interface StartPromptProps {
     text: string;
@@ -26,6 +38,7 @@ function Chat({ title, releaseYear }: ChatProps) {
 
   async function handleSendMessage(message: string) {
     if (!message.trim()) return;
+    setInput("");
 
     setIsLoading(true);
     setHasStarted(true);
@@ -69,11 +82,26 @@ function Chat({ title, releaseYear }: ChatProps) {
   }
 
   function Message({ text, role }: MessageProps) {
+    if (role === "user") {
+      return (
+        <View className={"bg-surface ml-auto rounded-lg p-3"}>
+          <Text className="text-white ">{text}</Text>
+        </View>
+      );
+    }
+
     return (
-      <View
-        className={`${role === "user" ? "bg-surface ml-auto" : "bg-surface mr-auto"} rounded-lg px-3 py-3`}
-      >
-        <Text className="text-white ">{text}</Text>
+      <View className="mr-auto">
+        <Markdown
+          style={{
+            body: { color: "#e7e5e4", fontSize: 18 },
+            // Add other element styles as needed
+            paragraph: { color: "#e7e5e4", fontSize: 18, marginBottom: 24 },
+            text: { color: "#e7e5e4", fontSize: 18 },
+          }}
+        >
+          {text}
+        </Markdown>
       </View>
     );
   }
@@ -91,55 +119,77 @@ function Chat({ title, releaseYear }: ChatProps) {
         />
         <StartPrompt
           text="🌀 Unpack the film’s meaning"
-          message="Explain the ending"
+          message="Unpack the film's meaning"
         />
         <StartPrompt
           text="🔍 Break down the symbolism"
-          message="Explain the ending"
+          message="Break down the symbolism"
         />
       </View>
     );
   }
 
   return (
-    <View className="py-8 relative px-4 h-screen">
-      <ScrollView>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={80}
+    >
+      {/* Chat container */}
+
+      <View className="flex-1 px-4 pt-8">
         {/* Start prompts */}
         {renderStartPrompts(hasStarted)}
 
-        {/* Messages */}
-        <View style={{ width: "100%" }}>
+        {/* Messages container with scroll */}
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ gap: 16, paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+        >
           {messages.map((item, idx) => (
             <Message key={idx} text={item.text} role={item.role} />
           ))}
-        </View>
 
-        {/* Loading dot */}
-        {isLoading && (
-          <MotiView
-            from={{ scale: 1, opacity: 0.6 }}
-            animate={{ scale: 1.3, opacity: 1 }}
-            transition={{
-              loop: true,
-              type: "timing",
-              duration: 900,
-            }}
-            className="bg-primary ml-2 w-6 h-6 rounded-full"
-          />
-        )}
-      </ScrollView>
-
-      {/* Input */}
-      <View className="absolute bottom-16 bg-input rounded-xl border border-1 border-border py-1 px-4 flex-row items-center">
-        <TextInput
-          className="text-white text-lg flex-1"
-          // value={query}
-          // onChangeText={handleSearch}
-          placeholder="Ask..."
-          placeholderTextColor="#9CA3AF"
-        />
+          {/* Loading indicator */}
+          {isLoading && (
+            <MotiView
+              from={{ scale: 1, opacity: 0.6 }}
+              animate={{ scale: 1.3, opacity: 1 }}
+              transition={{
+                loop: true,
+                type: "timing",
+                duration: 900,
+              }}
+              className="bg-primary ml-2 w-6 h-6 rounded-full mb-4"
+            />
+          )}
+        </ScrollView>
       </View>
-    </View>
+
+      {/* Input container - fixed at bottom */}
+      <View className="px-4 pb-8">
+        <View className="bg-input rounded-xl border border-border py-3 px-4 flex-row items-center">
+          <TextInput
+            className="text-white text-lg flex-1"
+            value={input}
+            onChangeText={setInput}
+            placeholder="Ask..."
+            placeholderTextColor="#9CA3AF"
+            multiline
+            maxLength={500}
+          />
+          {/* Optional send button */}
+          <Pressable
+            onPress={() => handleSendMessage(input)}
+            disabled={isLoading || !input.trim()}
+            className="ml-2 p-2"
+          >
+            <Text className="text-blue-400 font-semibold">Send</Text>
+          </Pressable>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

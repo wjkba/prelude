@@ -1,7 +1,6 @@
 import Chat from "@/components/Chat";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
-import { View } from "react-native";
 
 function ChatScreen() {
   const { title, releaseYear } = useLocalSearchParams<{
@@ -17,11 +16,7 @@ function ChatScreen() {
     });
   }, [navigation, title]);
 
-  return (
-    <View className="bg-background">
-      <Chat title={title} releaseYear={releaseYear} />
-    </View>
-  );
+  return <Chat title={title} releaseYear={releaseYear} />;
 }
 
 export default ChatScreen;
