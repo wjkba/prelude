@@ -55,7 +55,7 @@ export default function Settings() {
       }
 
       if (geminiKey.trim()) {
-        await AsyncStorage.setItem("gemini_api_key", openaiKey.trim());
+        await AsyncStorage.setItem("gemini_api_key", geminiKey.trim());
       } else {
         await AsyncStorage.removeItem("gemini_api_key");
       }
