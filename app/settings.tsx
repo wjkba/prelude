@@ -13,6 +13,7 @@ import {
 export default function Settings() {
   const navigation = useNavigation();
   const [openaiKey, setOpenaiKey] = useState("");
+  const [geminiKey, setGeminiKey] = useState("");
   const [omdbKey, setOmdbKey] = useState("");
   const [tmdbKey, setTmdbKey] = useState("");
 
@@ -30,10 +31,12 @@ export default function Settings() {
   const loadApiKeys = async () => {
     try {
       const openai = await AsyncStorage.getItem("openai_api_key");
+      const gemini = await AsyncStorage.getItem("gemini_api_key");
       const omdb = await AsyncStorage.getItem("omdb_api_key");
       const tmdb = await AsyncStorage.getItem("tmdb_read_access_token");
 
       if (openai) setOpenaiKey(openai);
+      if (gemini) setGeminiKey(gemini);
       if (omdb) setOmdbKey(omdb);
       if (tmdb) setTmdbKey(tmdb);
     } catch (error) {
@@ -49,6 +52,12 @@ export default function Settings() {
         await AsyncStorage.setItem("openai_api_key", openaiKey.trim());
       } else {
         await AsyncStorage.removeItem("openai_api_key");
+      }
+
+      if (geminiKey.trim()) {
+        await AsyncStorage.setItem("gemini_api_key", openaiKey.trim());
+      } else {
+        await AsyncStorage.removeItem("gemini_api_key");
       }
 
       if (omdbKey.trim()) {
@@ -102,6 +111,19 @@ export default function Settings() {
               value={openaiKey}
               onChangeText={setOpenaiKey}
               placeholder="Enter OpenAI API key"
+              placeholderTextColor="#6B7280"
+              className="bg-[#242329] text-white p-4 rounded-xl"
+              secureTextEntry
+            />
+          </View>
+
+          {/* Gemini API Key */}
+          <View>
+            <Text className="text-stone-300 mb-2">Gemini API Key</Text>
+            <TextInput
+              value={geminiKey}
+              onChangeText={setGeminiKey}
+              placeholder="Enter Gemini API key"
               placeholderTextColor="#6B7280"
               className="bg-[#242329] text-white p-4 rounded-xl"
               secureTextEntry

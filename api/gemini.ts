@@ -1,17 +1,24 @@
 import { filmDataAI } from "@/types";
 import { GoogleGenAI, Type } from "@google/genai";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PROMPTv4_GEMINI } from "./prompts";
 
-const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const getGoogleGenAIClient = async () => {
+  const apiKey =
+    (await AsyncStorage.getItem("gemini_api_key")) ||
+    process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+  return new GoogleGenAI({
+    apiKey: apiKey,
+  });
+};
 
 export async function getFilmInfoGemini(
   filmTitle: string,
   releaseYear: string
 ): Promise<filmDataAI> {
   try {
-    const response = await ai.models.generateContent({
+    const client = await getGoogleGenAIClient();
+    const response = await client.models.generateContent({
       model: "gemini-2.5-flash-lite",
       contents: `Generate analysis for the film: "${filmTitle}" (${releaseYear}`,
       config: {
@@ -95,7 +102,8 @@ export async function getChatResponseGemini(
   history?: GeminiChatHistoryItem[]
 ) {
   try {
-    const chat = ai.chats.create({
+    const client = await getGoogleGenAIClient();
+    const chat = client.chats.create({
       model: "gemini-2.5-flash",
       history: history ?? [],
       config: {
