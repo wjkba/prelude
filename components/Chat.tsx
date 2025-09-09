@@ -169,7 +169,7 @@ function Chat({ title, releaseYear }: ChatProps) {
 
       {/* Input container - fixed at bottom */}
       <View className="px-4 pb-8">
-        <View className="bg-input rounded-xl border border-border py-3 px-4 flex-row items-center">
+        <View className="bg-input rounded-xl border border-border py-2 px-4 flex-row items-center">
           <TextInput
             className="text-white text-lg flex-1"
             value={input}
