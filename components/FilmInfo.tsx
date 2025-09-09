@@ -38,7 +38,7 @@ interface BodyTextProps {
 
 function BodyText({ children, className = "" }: BodyTextProps) {
   return (
-    <Text className={`text-stone-100 text-lg ${className}`}>{children}</Text>
+    <Text className={`text-stone-200 text-lg ${className}`}>{children}</Text>
   );
 }
 
@@ -75,9 +75,9 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
     <View className="mx-4">
       {/* Opening sentence */}
       <View className="mb-12">
-        <BodyText className="text-xl mb-4">
+        <Text className="text-xl text-stone-100 mb-4">
           &quot;{filmData.openingSentence}&quot;
-        </BodyText>
+        </Text>
         <View className="flex-row gap-2  flex-wrap">
           {renderMoodTags(filmData.moodTags)}
         </View>
