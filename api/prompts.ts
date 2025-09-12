@@ -36,6 +36,6 @@ Generate the film information with the following fields:
 - **whatToLookOutFor**: An array of 4 to 6 objects, each with:
     - "emoji": A single emoji representing the point.
     - "title": A short title.
-    - "description": The description should be a sharp, spoiler-free insight into a **specific** piece of cinematic craft (a visual motif, sound design choice, camera technique). Go beyond the obvious: connect the detail to the film's mood or themes. **Avoid generic genre conventions.**
+    - "description": The description should be a sharp, spoiler-free insight into a **specific** piece of cinematic craft (a visual motif, sound design choice, camera technique). Go beyond the obvious: connect the detail to the film's mood or themes. **Avoid generic genre conventions.** Write in a concise manner.
 
 Write in a stylistically engaging, thoughtful, and evocative manner, but keep all fields succinct and mobile-friendly. Avoid repetition and do not include any external references or citations.`;
