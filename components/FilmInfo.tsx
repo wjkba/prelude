@@ -75,7 +75,7 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
     <View className="mx-4">
       {/* Opening sentence */}
       <View className="mb-12">
-        <BodyText className="text-xl text-white mb-4">
+        <Text className="text-xl text-white mb-4">
           &quot;{filmData.openingSentence}&quot;
         </Text>
         <View className="flex-row gap-2  flex-wrap">
