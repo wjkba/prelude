@@ -115,7 +115,7 @@ function FilmInfoScreen() {
       headerShown: true,
       title: "",
       headerRight: () => (
-        <Pressable onPress={clearFilmData} className="mr-4 p-0">
+        <Pressable onPress={clearFilmData} className="pl-4">
           <Ionicons name="ellipsis-vertical" size={20} color="white" />
         </Pressable>
       ),

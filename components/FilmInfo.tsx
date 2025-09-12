@@ -201,9 +201,9 @@ function FilmInfo({
           {/* Chat */}
           <LinearGradient
             start={{ x: 0, y: 0.1 }}
-            end={{ x: 0, y: 1 }}
-            colors={["transparent", "#A63C71"]}
-            className="mt-20 justify-center items-center  min-h-[200px]"
+            end={{ x: 0, y: 1.2 }}
+            colors={["transparent", "#8c325f"]}
+            className="mt-24 justify-center items-center  min-h-[200px]"
           >
             <Link
               href={{
