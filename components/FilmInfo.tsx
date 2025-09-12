@@ -75,7 +75,7 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
     <View className="mx-4">
       {/* Opening sentence */}
       <View className="mb-12">
-        <BodyText className="text-xl mb-4">
+        <BodyText className="text-xl text-white mb-4">
           &quot;{filmData.openingSentence}&quot;
         </BodyText>
         <View className="flex-row gap-2  flex-wrap">
@@ -94,6 +94,9 @@ function renderFilmInfoAI(filmData: FilmInfoProps["filmData"]) {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={8}
+            decelerationRate={"fast"}
+            snapToAlignment="start"
             contentContainerStyle={{ gap: 12, paddingRight: 64 }}
           >
             {filmData.themes.map((theme, index) => (
